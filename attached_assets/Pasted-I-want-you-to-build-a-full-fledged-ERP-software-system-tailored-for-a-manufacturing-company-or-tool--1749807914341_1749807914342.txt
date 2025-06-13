@@ -1,0 +1,139 @@
+I want you to build a full-fledged ERP software system tailored for a manufacturing company or tool room, similar to a Manufacturing Execution System (MES). This system must be developed entirely in C# using modern software design principles and best practices (e.g., SOLID principles, layered architecture).
+
+The ERP/MES must be scalable, secure, and modular. Use ASP.NET Core for the backend (Web API) and optionally Blazor or WPF/WinForms for the frontend (based on whether it's a web-based or desktop-based app).
+
+Include complete source code, architecture diagrams, database schema, and deployment instructions.
+
+🔧 System Requirements:
+
+1. Authentication & Authorization
+Role-based access control (Admin, Manager, Operator, Storekeeper, etc.)
+
+JWT-based token system for Web API
+
+Secure login/logout flow
+
+2. Master Data Management
+Employees
+
+Machines
+
+Tools
+
+Customers
+
+Vendors
+
+Units of Measurement
+
+Product BOM (Bill of Materials)
+
+3. Inventory Management
+Raw Material Management
+
+Tool Inventory
+
+Goods Receipt Note (GRN)
+
+Issue/Return Logs
+
+Minimum stock alerts
+
+FIFO/LIFO stock management
+
+4. Production Planning & Scheduling
+Work Order Generation
+
+Job Cards
+
+Machine Allocation
+
+Gantt Chart-based Schedule (UI)
+
+Real-time status tracking
+
+5. Shop Floor Control
+Operator Dashboard
+
+Machine Run Time vs Idle Time
+
+Breakdown Logging
+
+Maintenance Scheduling
+
+Rejection Entry (Reason tracking)
+
+6. Quality Control Module
+Incoming Inspection
+
+In-Process Inspection
+
+Final Inspection
+
+NCR (Non-conformance Report) handling
+
+7. Tool Room Management
+Tool Issuance and Return Tracking
+
+Life Cycle Management of Tools
+
+Tool Calibration and Maintenance Logs
+
+8. Sales and Dispatch
+Sales Order Entry
+
+Dispatch Plan
+
+Delivery Challan / Invoice Generation
+
+9. Procurement Management
+Purchase Requests and Orders
+
+Vendor Management
+
+Quotation Comparison
+
+Purchase Order Status
+
+10. Reports and Analytics
+Dashboard (Real-time KPIs)
+
+OEE Report
+
+Downtime Report
+
+Inventory Report
+
+Production vs Plan
+
+11. Database Design
+Use SQL Server as the backend
+
+Provide normalized database schema
+
+Use Entity Framework Core for ORM
+
+12. System Architecture
+Clean Architecture (Domain, Application, Infrastructure, API)
+
+RESTful API Layer
+
+Dependency Injection
+
+Logging and Exception Handling
+
+13. Deployment & DevOps
+Instructions to host on IIS or Azure
+
+Docker support (optional)
+
+CI/CD pipelines with GitHub Actions or Azure DevOps
+
+14. Code Quality & Documentation
+Follow C# naming conventions
+
+Unit tests using xUnit/NUnit
+
+Inline code documentation and README
+
+Swagger UI for API testing
