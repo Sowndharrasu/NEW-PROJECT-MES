@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - Manufacturing ERP System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h1 class="h3 mb-3">
+            <i class="fas fa-cogs me-2"></i>{{ title }}
+        </h1>
+    </div>
+    <div class="col-md-6 text-end">
+        <a href="{{ url_for('main.machines_list') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to List
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.machine_code.label(class="form-label") }}
+                        {% if form.machine_code.errors %}
+                            {{ form.machine_code(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.machine_code.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.machine_code(class="form-control") }}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.name.label(class="form-label") }}
+                        {% if form.name.errors %}
+                            {{ form.name(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.name.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.name(class="form-control") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.machine_type.label(class="form-label") }}
+                        {% if form.machine_type.errors %}
+                            {{ form.machine_type(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.machine_type.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.machine_type(class="form-control") }}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.manufacturer.label(class="form-label") }}
+                        {% if form.manufacturer.errors %}
+                            {{ form.manufacturer(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.manufacturer.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.manufacturer(class="form-control") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.model.label(class="form-label") }}
+                        {% if form.model.errors %}
+                            {{ form.model(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.model.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.model(class="form-control") }}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.capacity.label(class="form-label") }}
+                        {% if form.capacity.errors %}
+                            {{ form.capacity(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.capacity.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.capacity(class="form-control") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.location.label(class="form-label") }}
+                        {% if form.location.errors %}
+                            {{ form.location(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.location.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.location(class="form-control") }}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.installation_date.label(class="form-label") }}
+                        {% if form.installation_date.errors %}
+                            {{ form.installation_date(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.installation_date.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.installation_date(class="form-control") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <div class="form-check mt-2">
+                            {{ form.is_active(class="form-check-input") }}
+                            {{ form.is_active.label(class="form-check-label") }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Save Machine
+                    </button>
+                    <a href="{{ url_for('main.machines_list') }}" class="btn btn-secondary ms-2">
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

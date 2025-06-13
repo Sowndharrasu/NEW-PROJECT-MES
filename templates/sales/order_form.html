@@ -1,0 +1,325 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - Manufacturing ERP System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h1 class="h3 mb-3">
+            <i class="fas fa-chart-line me-2"></i>{{ title }}
+        </h1>
+    </div>
+    <div class="col-md-6 text-end">
+        <a href="{{ url_for('main.sales_orders_list') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to List
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.order_number.label(class="form-label") }}
+                        {% if form.order_number.errors %}
+                            {{ form.order_number(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.order_number.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.order_number(class="form-control") }}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.customer_id.label(class="form-label") }}
+                        {% if form.customer_id.errors %}
+                            {{ form.customer_id(class="form-select is-invalid", id="customerSelect") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.customer_id.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.customer_id(class="form-select", id="customerSelect") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.order_date.label(class="form-label") }}
+                        {% if form.order_date.errors %}
+                            {{ form.order_date(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.order_date.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.order_date(class="form-control") }}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.delivery_date.label(class="form-label") }}
+                        {% if form.delivery_date.errors %}
+                            {{ form.delivery_date(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.delivery_date.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.delivery_date(class="form-control") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        {{ form.total_amount.label(class="form-label") }}
+                        {% if form.total_amount.errors %}
+                            {{ form.total_amount(class="form-control is-invalid", step="0.01") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.total_amount.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.total_amount(class="form-control", step="0.01") }}
+                        {% endif %}
+                        <div class="form-text">Total order value including taxes</div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        {{ form.priority.label(class="form-label") }}
+                        {% if form.priority.errors %}
+                            {{ form.priority(class="form-select is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.priority.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.priority(class="form-select") }}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        {{ form.status.label(class="form-label") }}
+                        {% if form.status.errors %}
+                            {{ form.status(class="form-select is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.status.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.status(class="form-select") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Customer Information Display -->
+            <div id="customerInfo" class="alert alert-info d-none" role="alert">
+                <h6><i class="fas fa-info-circle me-2"></i>Customer Information</h6>
+                <div id="customerDetails"></div>
+            </div>
+            
+            <!-- Priority Alert -->
+            <div id="priorityAlert" class="alert alert-warning d-none" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>High Priority Order:</strong> This order requires expedited processing and delivery.
+            </div>
+            
+            <div class="alert alert-success" role="alert">
+                <i class="fas fa-lightbulb me-2"></i>
+                <strong>Sales Order Guidelines:</strong>
+                <ul class="mb-0 mt-2">
+                    <li>Verify customer credit limits and payment terms before confirming</li>
+                    <li>Ensure delivery dates are realistic based on production capacity</li>
+                    <li>High priority orders may require additional resources allocation</li>
+                    <li>After creating, add line items to specify products and quantities</li>
+                    <li>Coordinate with production planning for manufacturing schedule</li>
+                </ul>
+            </div>
+            
+            <div class="row">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Save Sales Order
+                    </button>
+                    <a href="{{ url_for('main.sales_orders_list') }}" class="btn btn-secondary ms-2">
+                        Cancel
+                    </a>
+                    <button type="button" class="btn btn-outline-success ms-2" onclick="calculateDeliveryDate()">
+                        <i class="fas fa-calculator me-2"></i>Calculate Delivery
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Quick Add Customer Modal -->
+<div class="modal fade" id="quickCustomerModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Quick Add Customer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="quickCustomerForm">
+                    <div class="mb-3">
+                        <label for="quickCustomerCode" class="form-label">Customer Code</label>
+                        <input type="text" class="form-control" id="quickCustomerCode" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="quickCustomerName" class="form-label">Customer Name</label>
+                        <input type="text" class="form-control" id="quickCustomerName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="quickCustomerContact" class="form-label">Contact Person</label>
+                        <input type="text" class="form-control" id="quickCustomerContact">
+                    </div>
+                    <div class="mb-3">
+                        <label for="quickCustomerPhone" class="form-label">Phone</label>
+                        <input type="text" class="form-control" id="quickCustomerPhone">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="addQuickCustomer()">Add Customer</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const customerSelect = document.getElementById('customerSelect');
+    const customerInfo = document.getElementById('customerInfo');
+    const customerDetails = document.getElementById('customerDetails');
+    const prioritySelect = document.querySelector('select[name="priority"]');
+    const priorityAlert = document.getElementById('priorityAlert');
+    
+    // Set default order date to today
+    const orderDateInput = document.querySelector('input[name="order_date"]');
+    if (orderDateInput && !orderDateInput.value) {
+        orderDateInput.value = new Date().toISOString().split('T')[0];
+    }
+    
+    // Set default delivery date to 21 days from now (3 weeks)
+    const deliveryDateInput = document.querySelector('input[name="delivery_date"]');
+    if (deliveryDateInput && !deliveryDateInput.value) {
+        const deliveryDate = new Date();
+        deliveryDate.setDate(deliveryDate.getDate() + 21);
+        deliveryDateInput.value = deliveryDate.toISOString().split('T')[0];
+    }
+    
+    customerSelect.addEventListener('change', function() {
+        if (this.value) {
+            customerDetails.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Selected Customer:</strong> ${this.options[this.selectedIndex].text}<br>
+                        <strong>Contact:</strong> Customer contact information would be loaded here
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Address:</strong> Customer address would be displayed<br>
+                        <strong>Credit Limit:</strong> Credit status would be shown
+                    </div>
+                </div>
+            `;
+            customerInfo.classList.remove('d-none');
+        } else {
+            customerInfo.classList.add('d-none');
+        }
+    });
+    
+    prioritySelect.addEventListener('change', function() {
+        if (this.value === 'High' || this.value === 'Urgent') {
+            priorityAlert.classList.remove('d-none');
+        } else {
+            priorityAlert.classList.add('d-none');
+        }
+    });
+    
+    // Trigger initial checks
+    if (customerSelect.value) customerSelect.dispatchEvent(new Event('change'));
+    if (prioritySelect.value) prioritySelect.dispatchEvent(new Event('change'));
+});
+
+function calculateDeliveryDate() {
+    const priority = document.querySelector('select[name="priority"]').value;
+    const orderDate = new Date(document.querySelector('input[name="order_date"]').value);
+    const deliveryDateInput = document.querySelector('input[name="delivery_date"]');
+    
+    let daysToAdd = 21; // Default 3 weeks
+    
+    switch(priority) {
+        case 'Urgent':
+            daysToAdd = 7; // 1 week
+            break;
+        case 'High':
+            daysToAdd = 14; // 2 weeks
+            break;
+        case 'Normal':
+            daysToAdd = 21; // 3 weeks
+            break;
+        case 'Low':
+            daysToAdd = 28; // 4 weeks
+            break;
+    }
+    
+    const deliveryDate = new Date(orderDate);
+    deliveryDate.setDate(deliveryDate.getDate() + daysToAdd);
+    deliveryDateInput.value = deliveryDate.toISOString().split('T')[0];
+    
+    alert(`Delivery date calculated based on ${priority} priority: ${daysToAdd} days from order date`);
+}
+
+function addQuickCustomer() {
+    // In a real application, this would make an AJAX call to add the customer
+    alert('Quick customer add functionality would be implemented here');
+    bootstrap.Modal.getInstance(document.getElementById('quickCustomerModal')).hide();
+}
+
+// Add customer button next to select
+document.addEventListener('DOMContentLoaded', function() {
+    const customerSelectDiv = document.getElementById('customerSelect').parentElement;
+    const addCustomerBtn = document.createElement('button');
+    addCustomerBtn.type = 'button';
+    addCustomerBtn.className = 'btn btn-outline-success btn-sm mt-1';
+    addCustomerBtn.innerHTML = '<i class="fas fa-plus me-1"></i>Quick Add Customer';
+    addCustomerBtn.onclick = function() {
+        new bootstrap.Modal(document.getElementById('quickCustomerModal')).show();
+    };
+    customerSelectDiv.appendChild(addCustomerBtn);
+});
+</script>
+{% endblock %}
