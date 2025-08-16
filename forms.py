@@ -1,14 +1,19 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SelectField, DateField, DecimalField, IntegerField, BooleanField, PasswordField
-from wtforms.validators import DataRequired, Length, Email, NumberRange, Optional
-from models import User, Employee, Machine, Tool, Customer, Vendor, Product
+from wtforms import (
+    StringField, TextAreaField, SelectField, DateField, DecimalField,
+    IntegerField, BooleanField, PasswordField
+)
+from wtforms.validators import (
+    DataRequired, Length, Email, NumberRange, Optional
+)
 
-
+# ------------------ AUTH ------------------ #
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=4, max=25)])
     password = PasswordField('Password', validators=[DataRequired()])
 
 
+# ------------------ EMPLOYEE ------------------ #
 class EmployeeForm(FlaskForm):
     employee_code = StringField('Employee Code', validators=[DataRequired(), Length(max=20)])
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
@@ -20,6 +25,7 @@ class EmployeeForm(FlaskForm):
     is_active = BooleanField('Active')
 
 
+# ------------------ MACHINE ------------------ #
 class MachineForm(FlaskForm):
     machine_code = StringField('Machine Code', validators=[DataRequired(), Length(max=20)])
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
@@ -32,6 +38,7 @@ class MachineForm(FlaskForm):
     is_active = BooleanField('Active')
 
 
+# ------------------ TOOL ------------------ #
 class ToolForm(FlaskForm):
     tool_code = StringField('Tool Code', validators=[DataRequired(), Length(max=20)])
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
@@ -44,6 +51,7 @@ class ToolForm(FlaskForm):
     is_active = BooleanField('Active')
 
 
+# ------------------ CUSTOMER ------------------ #
 class CustomerForm(FlaskForm):
     customer_code = StringField('Customer Code', validators=[DataRequired(), Length(max=20)])
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
@@ -58,6 +66,7 @@ class CustomerForm(FlaskForm):
     is_active = BooleanField('Active')
 
 
+# ------------------ VENDOR ------------------ #
 class VendorForm(FlaskForm):
     vendor_code = StringField('Vendor Code', validators=[DataRequired(), Length(max=20)])
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
@@ -72,6 +81,7 @@ class VendorForm(FlaskForm):
     is_active = BooleanField('Active')
 
 
+# ------------------ PRODUCT ------------------ #
 class ProductForm(FlaskForm):
     product_code = StringField('Product Code', validators=[DataRequired(), Length(max=20)])
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
@@ -87,9 +97,10 @@ class ProductForm(FlaskForm):
     is_active = BooleanField('Active')
 
 
+# ------------------ GRN ------------------ #
 class GRNForm(FlaskForm):
     grn_number = StringField('GRN Number', validators=[DataRequired(), Length(max=20)])
-    vendor_id = SelectField('Vendor', coerce=int, validators=[DataRequired()])
+    vendor_id = SelectField('Vendor', coerce=str, validators=[DataRequired()])
     received_date = DateField('Received Date', validators=[DataRequired()])
     invoice_number = StringField('Invoice Number', validators=[Optional(), Length(max=50)])
     total_amount = DecimalField('Total Amount', validators=[Optional(), NumberRange(min=0)])
@@ -100,9 +111,10 @@ class GRNForm(FlaskForm):
     ])
 
 
+# ------------------ WORK ORDER ------------------ #
 class WorkOrderForm(FlaskForm):
     work_order_number = StringField('Work Order Number', validators=[DataRequired(), Length(max=20)])
-    product_id = SelectField('Product', coerce=int, validators=[DataRequired()])
+    product_id = SelectField('Product', coerce=str, validators=[DataRequired()])
     quantity_ordered = DecimalField('Quantity Ordered', validators=[DataRequired(), NumberRange(min=0)])
     priority = SelectField('Priority', choices=[
         ('Low', 'Low'),
@@ -121,6 +133,7 @@ class WorkOrderForm(FlaskForm):
     ])
 
 
+# ------------------ QUALITY INSPECTION ------------------ #
 class QualityInspectionForm(FlaskForm):
     inspection_number = StringField('Inspection Number', validators=[DataRequired(), Length(max=20)])
     inspection_type = SelectField('Inspection Type', choices=[
@@ -128,12 +141,12 @@ class QualityInspectionForm(FlaskForm):
         ('In-Process', 'In-Process'),
         ('Final', 'Final')
     ], validators=[DataRequired()])
-    work_order_id = SelectField('Work Order', coerce=int, validators=[Optional()])
-    product_id = SelectField('Product', coerce=int, validators=[DataRequired()])
+    work_order_id = SelectField('Work Order', coerce=str, validators=[Optional()])
+    product_id = SelectField('Product', coerce=str, validators=[DataRequired()])
     quantity_inspected = DecimalField('Quantity Inspected', validators=[DataRequired(), NumberRange(min=0)])
     quantity_accepted = DecimalField('Quantity Accepted', validators=[DataRequired(), NumberRange(min=0)])
     quantity_rejected = DecimalField('Quantity Rejected', validators=[DataRequired(), NumberRange(min=0)])
-    inspector_id = SelectField('Inspector', coerce=int, validators=[DataRequired()])
+    inspector_id = SelectField('Inspector', coerce=str, validators=[DataRequired()])
     inspection_date = DateField('Inspection Date', validators=[DataRequired()])
     status = SelectField('Status', choices=[
         ('Pending', 'Pending'),
@@ -143,19 +156,21 @@ class QualityInspectionForm(FlaskForm):
     remarks = TextAreaField('Remarks')
 
 
+# ------------------ TOOL ISSUANCE ------------------ #
 class ToolIssuanceForm(FlaskForm):
     issue_number = StringField('Issue Number', validators=[DataRequired(), Length(max=20)])
-    tool_id = SelectField('Tool', coerce=int, validators=[DataRequired()])
-    employee_id = SelectField('Employee', coerce=int, validators=[DataRequired()])
-    work_order_id = SelectField('Work Order', coerce=int, validators=[Optional()])
+    tool_id = SelectField('Tool', coerce=str, validators=[DataRequired()])
+    employee_id = SelectField('Employee', coerce=str, validators=[DataRequired()])
+    work_order_id = SelectField('Work Order', coerce=str, validators=[Optional()])
     quantity_issued = IntegerField('Quantity Issued', validators=[DataRequired(), NumberRange(min=1)])
     issue_date = DateField('Issue Date', validators=[DataRequired()])
     expected_return_date = DateField('Expected Return Date', validators=[Optional()])
 
 
+# ------------------ PURCHASE ORDER ------------------ #
 class PurchaseOrderForm(FlaskForm):
     po_number = StringField('PO Number', validators=[DataRequired(), Length(max=20)])
-    vendor_id = SelectField('Vendor', coerce=int, validators=[DataRequired()])
+    vendor_id = SelectField('Vendor', coerce=str, validators=[DataRequired()])
     po_date = DateField('PO Date', validators=[DataRequired()])
     delivery_date = DateField('Delivery Date', validators=[Optional()])
     total_amount = DecimalField('Total Amount', validators=[Optional(), NumberRange(min=0)])
@@ -169,9 +184,10 @@ class PurchaseOrderForm(FlaskForm):
     terms_and_conditions = TextAreaField('Terms and Conditions')
 
 
+# ------------------ SALES ORDER ------------------ #
 class SalesOrderForm(FlaskForm):
     order_number = StringField('Order Number', validators=[DataRequired(), Length(max=20)])
-    customer_id = SelectField('Customer', coerce=int, validators=[DataRequired()])
+    customer_id = SelectField('Customer', coerce=str, validators=[DataRequired()])
     order_date = DateField('Order Date', validators=[DataRequired()])
     delivery_date = DateField('Delivery Date', validators=[Optional()])
     total_amount = DecimalField('Total Amount', validators=[Optional(), NumberRange(min=0)])

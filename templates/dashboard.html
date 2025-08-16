@@ -1,14 +1,14 @@
-{% extends "base.html" %}
-
-{% block title %}Dashboard - Manufacturing ERP System{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Dashboard - Manufacturing ERP
+System{% endblock %} {% block content %}
 <div class="row mb-4">
     <div class="col-12">
         <h1 class="h3 mb-3">
             <i class="fas fa-tachometer-alt me-2"></i>Dashboard
         </h1>
-        <p class="text-muted">Welcome back, {{ current_user.username }}! Here's your system overview.</p>
+        <p class="text-muted">
+            Welcome back, {{ current_user.username }}! Here's your system
+            overview.
+        </p>
     </div>
 </div>
 
@@ -29,45 +29,55 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-sm-6 col-xl-3">
         <div class="card bg-warning">
             <div class="card-body">
                 <div class="d-flex align-items-start">
                     <div class="flex-grow-1">
-                        <h3 class="mb-2 text-dark">{{ stats.pending_inspections }}</h3>
+                        <h3 class="mb-2 text-dark">
+                            {{ stats.pending_inspections }}
+                        </h3>
                         <p class="mb-2 text-dark">Pending Inspections</p>
                         <div class="mb-0">
-                            <i class="fas fa-search fa-2x text-dark opacity-50"></i>
+                            <i
+                                class="fas fa-search fa-2x text-dark opacity-50"
+                            ></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div class="col-sm-6 col-xl-3">
         <div class="card bg-danger">
             <div class="card-body">
                 <div class="d-flex align-items-start">
                     <div class="flex-grow-1">
-                        <h3 class="mb-2 text-white">{{ stats.low_stock_tools }}</h3>
+                        <h3 class="mb-2 text-white">
+                            {{ stats.low_stock_tools }}
+                        </h3>
                         <p class="mb-2 text-white-50">Low Stock Alerts</p>
                         <div class="mb-0">
-                            <i class="fas fa-exclamation-triangle fa-2x text-white-50"></i>
+                            <i
+                                class="fas fa-exclamation-triangle fa-2x text-white-50"
+                            ></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div class="col-sm-6 col-xl-3">
         <div class="card bg-success">
             <div class="card-body">
                 <div class="d-flex align-items-start">
                     <div class="flex-grow-1">
-                        <h3 class="mb-2 text-white">{{ stats.active_employees }}</h3>
+                        <h3 class="mb-2 text-white">
+                            {{ stats.active_employees }}
+                        </h3>
                         <p class="mb-2 text-white-50">Active Employees</p>
                         <div class="mb-0">
                             <i class="fas fa-users fa-2x text-white-50"></i>
@@ -92,7 +102,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-4">
         <div class="card">
             <div class="card-body">
@@ -104,7 +114,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-4">
         <div class="card">
             <div class="card-body">
@@ -148,16 +158,22 @@
                                 </td>
                                 <td>{{ wo.product.name }}</td>
                                 <td>
-                                    <span class="badge {{ get_status_badge_class(wo.status) }}">
+                                    <span
+                                        class="badge {{ get_status_badge_class(wo.status) }}"
+                                    >
                                         {{ wo.status }}
                                     </span>
                                 </td>
                                 <td>
-                                    <span class="badge {{ get_priority_badge_class(wo.priority) }}">
+                                    <span
+                                        class="badge {{ get_priority_badge_class(wo.priority) }}"
+                                    >
                                         {{ wo.priority }}
                                     </span>
                                 </td>
-                                <td>{{ wo.created_at.strftime('%Y-%m-%d') }}</td>
+                                <td>
+                                    {{ wo.created_at.strftime('%Y-%m-%d') }}
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -167,7 +183,10 @@
                 <div class="text-center py-4">
                     <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
                     <p class="text-muted">No recent work orders found.</p>
-                    <a href="{{ url_for('main.work_orders_new') }}" class="btn btn-primary">
+                    <a
+                        href="{{ url_for('main.work_orders_new') }}"
+                        class="btn btn-primary"
+                    >
                         <i class="fas fa-plus me-2"></i>Create Work Order
                     </a>
                 </div>
@@ -175,12 +194,13 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h5 class="mb-0">
-                    <i class="fas fa-exclamation-triangle me-2"></i>Low Stock Alerts
+                    <i class="fas fa-exclamation-triangle me-2"></i>Low Stock
+                    Alerts
                 </h5>
             </div>
             <div class="card-body">
@@ -190,10 +210,15 @@
                     <div class="list-group-item list-group-item-action">
                         <div class="d-flex w-100 justify-content-between">
                             <h6 class="mb-1">{{ item.name }}</h6>
-                            <small class="text-danger">{{ item.quantity_available }}/{{ item.minimum_stock }}</small>
+                            <small class="text-danger"
+                                >{{ item.quantity_available }}/{{
+                                item.minimum_stock }}</small
+                            >
                         </div>
                         <p class="mb-1">{{ item.tool_code }}</p>
-                        <small class="text-muted">{{ item.location or 'Location not set' }}</small>
+                        <small class="text-muted"
+                            >{{ item.location or 'Location not set' }}</small
+                        >
                     </div>
                     {% endfor %}
                 </div>
@@ -208,6 +233,7 @@
     </div>
 </div>
 
+{#
 <!-- Quick Actions -->
 <div class="row mt-4">
     <div class="col-12">
@@ -221,25 +247,38 @@
                 <div class="row g-3">
                     {% if current_user.role in ['Admin', 'Manager'] %}
                     <div class="col-md-3">
-                        <a href="{{ url_for('main.work_orders_new') }}" class="btn btn-outline-primary w-100">
-                            <i class="fas fa-plus-circle me-2"></i>New Work Order
+                        <a
+                            href="{{ url_for('main.work_orders_new') }}"
+                            class="btn btn-outline-primary w-100"
+                        >
+                            <i class="fas fa-plus-circle me-2"></i>New Work
+                            Order
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="{{ url_for('main.inspections_new') }}" class="btn btn-outline-success w-100">
-                            <i class="fas fa-search-plus me-2"></i>New Inspection
+                        <a
+                            href="{{ url_for('main.inspections_new') }}"
+                            class="btn btn-outline-success w-100"
+                        >
+                            <i class="fas fa-search-plus me-2"></i>New
+                            Inspection
                         </a>
                     </div>
-                    {% endif %}
-                    
-                    {% if current_user.role in ['Admin', 'Manager', 'Storekeeper'] %}
+                    {% endif %} {% if current_user.role in ['Admin', 'Manager',
+                    'Storekeeper'] %}
                     <div class="col-md-3">
-                        <a href="{{ url_for('main.tool_issuances_new') }}" class="btn btn-outline-warning w-100">
+                        <a
+                            href="{{ url_for('main.tool_issuances_new') }}"
+                            class="btn btn-outline-warning w-100"
+                        >
                             <i class="fas fa-hand-holding me-2"></i>Issue Tool
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="{{ url_for('main.grn_new') }}" class="btn btn-outline-info w-100">
+                        <a
+                            href="{{ url_for('main.grn_new') }}"
+                            class="btn btn-outline-info w-100"
+                        >
                             <i class="fas fa-clipboard-list me-2"></i>New GRN
                         </a>
                     </div>
@@ -249,16 +288,16 @@
         </div>
     </div>
 </div>
-{% endblock %}
+#} {% endblock %}
 
 {% block scripts %}
 <script>
-// Add any dashboard-specific JavaScript here
-document.addEventListener('DOMContentLoaded', function() {
-    // Auto-refresh dashboard every 5 minutes
-    setTimeout(function() {
-        location.reload();
-    }, 300000);
-});
+    // Add any dashboard-specific JavaScript here
+    document.addEventListener("DOMContentLoaded", function () {
+        // Auto-refresh dashboard every 5 minutes
+        setTimeout(function () {
+            location.reload();
+        }, 300000);
+    });
 </script>
 {% endblock %}
