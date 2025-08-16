@@ -223,10 +223,10 @@ def customers_new():
         return redirect(url_for('main.customers_list'))
     return render_template('customers/form.html', form=form, title="Add Customer")
 
-@main_bp.route('/customers/<customer_id>/edit', methods=['GET', 'POST'])
+@main_bp.route('/customers/<id>/edit', methods=['GET', 'POST'])
 @login_required
-def customers_edit(customer_id):
-    customer = CustomerDoc.objects.get_or_404(id=customer_id)
+def customers_edit(id):
+    customer = CustomerDoc.objects.get_or_404(id=id)
     form = CustomerForm(obj=customer)
     if form.validate_on_submit():
         customer.customer_code = form.customer_code.data
@@ -369,10 +369,10 @@ def machines_new():
         return redirect(url_for('main.machines_list'))
     return render_template('machines/form.html', form=form, title="Add Machine")
 
-@main_bp.route('/machines/<machine_id>/edit', methods=['GET', 'POST'])
+@main_bp.route('/machines/<id>/edit', methods=['GET', 'POST'])
 @login_required
-def machines_edit(machine_id):
-    machine = MachineDoc.objects.get_or_404(id=machine_id)
+def machines_edit(id):
+    machine = MachineDoc.objects.get_or_404(id=id)
     form = MachineForm(obj=machine)
     if form.validate_on_submit():
         machine.machine_code = form.machine_code.data
@@ -426,10 +426,10 @@ def tools_new():
         return redirect(url_for('main.tools_list'))
     return render_template('tools/form.html', form=form, title="Add Tool")
 
-@main_bp.route('/tools/<tool_id>/edit', methods=['GET', 'POST'])
+@main_bp.route('/tools/<id>/edit', methods=['GET', 'POST'])
 @login_required
-def tools_edit(tool_id):
-    tool = ToolDoc.objects.get_or_404(id=tool_id)
+def tools_edit(id):
+    tool = ToolDoc.objects.get_or_404(id=id)
     form = ToolForm(obj=tool)
     if form.validate_on_submit():
         tool.tool_code = form.tool_code.data
@@ -484,10 +484,10 @@ def vendors_new():
         return redirect(url_for('main.vendors_list'))
     return render_template('vendors/form.html', form=form, title="Add Vendor")
 
-@main_bp.route('/vendors/<vendor_id>/edit', methods=['GET', 'POST'])
+@main_bp.route('/vendors/<id>/edit', methods=['GET', 'POST'])
 @login_required
-def vendors_edit(vendor_id):
-    vendor = VendorDoc.objects.get_or_404(id=vendor_id)
+def vendors_edit(id):
+    vendor = VendorDoc.objects.get_or_404(id=id)
     form = VendorForm(obj=vendor)
     if form.validate_on_submit():
         vendor.vendor_code = form.vendor_code.data
@@ -540,10 +540,10 @@ def products_new():
         return redirect(url_for('main.products_list'))
     return render_template('products/form.html', form=form, title="Add Product")
 
-@main_bp.route('/products/<product_id>/edit', methods=['GET', 'POST'])
+@main_bp.route('/products/<id>/edit', methods=['GET', 'POST'])
 @login_required
-def products_edit(product_id):
-    product = ProductDoc.objects.get_or_404(id=product_id)
+def products_edit(id):
+    product = ProductDoc.objects.get_or_404(id=id)
     form = ProductForm(obj=product)
     if form.validate_on_submit():
         product.product_code = form.product_code.data
