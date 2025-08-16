@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+
+{% block title %}Purchase Orders - Manufacturing ERP System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h1 class="h3 mb-3">
+            <i class="fas fa-shopping-cart me-2"></i>Purchase Orders
+        </h1>
+    </div>
+    <div class="col-md-6 text-end">
+        {% if current_user.role in ['Admin', 'Manager'] %}
+        <a href="{{ url_for('main.purchase_orders_new') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Create Purchase Order
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Filter Options -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="GET" class="row g-3">
+            <div class="col-md-3">
+                <label for="status" class="form-label">Status</label>
+                <select name="status" id="status" class="form-select">
+                    <option value="">All Statuses</option>
+                    <option value="Draft" {{ 'selected' if request.args.get('status') == 'Draft' }}>Draft</option>
+                    <option value="Sent" {{ 'selected' if request.args.get('status') == 'Sent' }}>Sent</option>
+                    <option value="Acknowledged" {{ 'selected' if request.args.get('status') == 'Acknowledged' }}>Acknowledged</option>
+                    <option value="Delivered" {{ 'selected' if request.args.get('status') == 'Delivered' }}>Delivered</option>
+                    <option value="Closed" {{ 'selected' if request.args.get('status') == 'Closed' }}>Closed</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="vendor" class="form-label">Vendor</label>
+                <input type="text" name="vendor" id="vendor" class="form-control" 
+                       value="{{ request.args.get('vendor', '') }}" placeholder="Vendor name">
+            </div>
+            <div class="col-md-2">
+                <label for="date_from" class="form-label">From Date</label>
+                <input type="date" name="date_from" id="date_from" class="form-control" 
+                       value="{{ request.args.get('date_from', '') }}">
+            </div>
+            <div class="col-md-2">
+                <label for="date_to" class="form-label">To Date</label>
+                <input type="date" name="date_to" id="date_to" class="form-control" 
+                       value="{{ request.args.get('date_to', '') }}">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">&nbsp;</label>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="fas fa-filter me-1"></i>Filter
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        {% if purchase_orders.items %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>PO Number</th>
+                        <th>Vendor</th>
+                        <th>PO Date</th>
+                        <th>Delivery Date</th>
+                        <th>Total Amount</th>
+                        <th>Status</th>
+                        <th>Created By</th>
+                        <th>Days Outstanding</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for po in purchase_orders.items %}
+                    <tr class="{{ 'table-warning' if po.status == 'Draft' and (moment().date() - po.po_date).days > 3 else '' }}">
+                        <td><strong>{{ po.po_number }}</strong></td>
+                        <td>{{ po.vendor.name }}</td>
+                        <td>{{ po.po_date.strftime('%d-%m-%Y') }}</td>
+                        <td>
+                            {% if po.delivery_date %}
+                                {{ po.delivery_date.strftime('%d-%m-%Y') }}
+                                {% if po.status not in ['Delivered', 'Closed'] and po.delivery_date < moment().date() %}
+                                    <i class="fas fa-exclamation-triangle text-warning ms-1" title="Overdue"></i>
+                                {% endif %}
+                            {% else %}
+                                <span class="text-muted">Not set</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ "₹{:,.2f}".format(po.total_amount) if po.total_amount else 'TBD' }}</td>
+                        <td>
+                            <span class="badge {{ get_status_badge_class(po.status) }}">
+                                {{ po.status }}
+                            </span>
+                        </td>
+                        <td>{{ po.created_by_user.username }}</td>
+                        <td>
+                            {% if po.status not in ['Delivered', 'Closed'] %}
+                                {% set days_outstanding = (moment().date() - po.po_date).days %}
+                                <span class="{{ 'text-warning' if days_outstanding > 7 else 'text-danger' if days_outstanding > 14 else 'text-muted' }}">
+                                    {{ days_outstanding }} days
+                                </span>
+                            {% else %}
+                                <span class="text-success">Completed</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button type="button" class="btn btn-outline-info btn-sm" 
+                                        data-bs-toggle="tooltip" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                {% if current_user.role in ['Admin', 'Manager'] and po.status in ['Draft', 'Sent'] %}
+                                <a href="#" class="btn btn-outline-primary btn-sm"
+                                   data-bs-toggle="tooltip" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                {% endif %}
+                                {% if po.status == 'Draft' and current_user.role in ['Admin', 'Manager'] %}
+                                <button type="button" class="btn btn-outline-success btn-sm" 
+                                        data-bs-toggle="tooltip" title="Send to Vendor"
+                                        onclick="updatePOStatus({{ po.id }}, 'Sent')">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                                {% endif %}
+                                <button type="button" class="btn btn-outline-secondary btn-sm" 
+                                        data-bs-toggle="tooltip" title="Print PO">
+                                    <i class="fas fa-print"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Purchase Order Summary -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="alert alert-light" role="alert">
+                    {% set status_counts = purchase_orders.items | groupby('status') | list %}
+                    {% set total_value = purchase_orders.items | selectattr('total_amount') | sum(attribute='total_amount') %}
+                    
+                    <div class="row text-center">
+                        <div class="col-md-2">
+                            <strong>Total POs</strong><br>
+                            <span class="h5">{{ purchase_orders.total }}</span>
+                        </div>
+                        {% for status, items in status_counts %}
+                        <div class="col-md-2">
+                            <strong>{{ status }}</strong><br>
+                            <span class="h6 badge {{ get_status_badge_class(status) }}">
+                                {{ items | list | length }}
+                            </span>
+                        </div>
+                        {% endfor %}
+                        <div class="col-md-2">
+                            <strong>Total Value</strong><br>
+                            <span class="h5 text-success">{{ "₹{:,.2f}".format(total_value) }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        {% if purchase_orders.pages > 1 %}
+        <nav aria-label="Purchase order pagination">
+            <ul class="pagination justify-content-center mt-4">
+                {% if purchase_orders.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('main.purchase_orders_list', page=purchase_orders.prev_num, **request.args) }}">
+                        Previous
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for page_num in purchase_orders.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                    {% if page_num %}
+                        {% if page_num != purchase_orders.page %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('main.purchase_orders_list', page=page_num, **request.args) }}">
+                                {{ page_num }}
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ page_num }}</span>
+                        </li>
+                        {% endif %}
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if purchase_orders.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('main.purchase_orders_list', page=purchase_orders.next_num, **request.args) }}">
+                        Next
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+            <h5>No purchase orders found</h5>
+            <p class="text-muted">Start procurement by creating your first purchase order.</p>
+            {% if current_user.role in ['Admin', 'Manager'] %}
+            <a href="{{ url_for('main.purchase_orders_new') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Create Purchase Order
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Initialize tooltips
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+});
+
+function updatePOStatus(poId, newStatus) {
+    if (confirm(`Are you sure you want to ${newStatus.toLowerCase()} this purchase order?`)) {
+        // In a real application, this would make an AJAX call to update the status
+        alert(`Purchase order status would be updated to ${newStatus}`);
+        location.reload();
+    }
+}
+</script>
+{% endblock %}

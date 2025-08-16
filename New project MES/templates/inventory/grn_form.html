@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - Manufacturing ERP System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h1 class="h3 mb-3">
+            <i class="fas fa-clipboard-list me-2"></i>{{ title }}
+        </h1>
+    </div>
+    <div class="col-md-6 text-end">
+        <a href="{{ url_for('main.inventory_raw_materials') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Inventory
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.grn_number.label(class="form-label") }}
+                        {% if form.grn_number.errors %}
+                            {{ form.grn_number(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.grn_number.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.grn_number(class="form-control") }}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.vendor_id.label(class="form-label") }}
+                        {% if form.vendor_id.errors %}
+                            {{ form.vendor_id(class="form-select is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.vendor_id.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.vendor_id(class="form-select") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.received_date.label(class="form-label") }}
+                        {% if form.received_date.errors %}
+                            {{ form.received_date(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.received_date.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.received_date(class="form-control") }}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.invoice_number.label(class="form-label") }}
+                        {% if form.invoice_number.errors %}
+                            {{ form.invoice_number(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.invoice_number.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.invoice_number(class="form-control") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.total_amount.label(class="form-label") }}
+                        {% if form.total_amount.errors %}
+                            {{ form.total_amount(class="form-control is-invalid", step="0.01") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.total_amount.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.total_amount(class="form-control", step="0.01") }}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.status.label(class="form-label") }}
+                        {% if form.status.errors %}
+                            {{ form.status(class="form-select is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.status.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.status(class="form-select") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alert alert-info" role="alert">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Note:</strong> After creating the GRN, you can add line items to specify the materials received.
+            </div>
+            
+            <div class="row">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Create GRN
+                    </button>
+                    <a href="{{ url_for('main.inventory_raw_materials') }}" class="btn btn-secondary ms-2">
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

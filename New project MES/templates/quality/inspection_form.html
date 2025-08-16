@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - Manufacturing ERP System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h1 class="h3 mb-3">
+            <i class="fas fa-search me-2"></i>{{ title }}
+        </h1>
+    </div>
+    <div class="col-md-6 text-end">
+        <a href="{{ url_for('main.inspections_list') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to List
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.inspection_number.label(class="form-label") }}
+                        {% if form.inspection_number.errors %}
+                            {{ form.inspection_number(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.inspection_number.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.inspection_number(class="form-control") }}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.inspection_type.label(class="form-label") }}
+                        {% if form.inspection_type.errors %}
+                            {{ form.inspection_type(class="form-select is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.inspection_type.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.inspection_type(class="form-select") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.product_id.label(class="form-label") }}
+                        {% if form.product_id.errors %}
+                            {{ form.product_id(class="form-select is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.product_id.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.product_id(class="form-select") }}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.work_order_id.label(class="form-label") }}
+                        {% if form.work_order_id.errors %}
+                            {{ form.work_order_id(class="form-select is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.work_order_id.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.work_order_id(class="form-select") }}
+                        {% endif %}
+                        <div class="form-text">Optional - for in-process and final inspections</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        {{ form.quantity_inspected.label(class="form-label") }}
+                        {% if form.quantity_inspected.errors %}
+                            {{ form.quantity_inspected(class="form-control is-invalid", step="0.001") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.quantity_inspected.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.quantity_inspected(class="form-control", step="0.001", id="qty_inspected") }}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        {{ form.quantity_accepted.label(class="form-label") }}
+                        {% if form.quantity_accepted.errors %}
+                            {{ form.quantity_accepted(class="form-control is-invalid", step="0.001") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.quantity_accepted.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.quantity_accepted(class="form-control", step="0.001", id="qty_accepted") }}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        {{ form.quantity_rejected.label(class="form-label") }}
+                        {% if form.quantity_rejected.errors %}
+                            {{ form.quantity_rejected(class="form-control is-invalid", step="0.001") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.quantity_rejected.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.quantity_rejected(class="form-control", step="0.001", id="qty_rejected") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.inspector_id.label(class="form-label") }}
+                        {% if form.inspector_id.errors %}
+                            {{ form.inspector_id(class="form-select is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.inspector_id.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.inspector_id(class="form-select") }}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.inspection_date.label(class="form-label") }}
+                        {% if form.inspection_date.errors %}
+                            {{ form.inspection_date(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.inspection_date.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.inspection_date(class="form-control") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.status.label(class="form-label") }}
+                        {% if form.status.errors %}
+                            {{ form.status(class="form-select is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.status.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.status(class="form-select") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-12">
+                    <div class="mb-3">
+                        {{ form.remarks.label(class="form-label") }}
+                        {% if form.remarks.errors %}
+                            {{ form.remarks(class="form-control is-invalid", rows="4") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.remarks.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.remarks(class="form-control", rows="4", placeholder="Enter inspection remarks, issues found, corrective actions, etc.") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alert alert-info" role="alert">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Quality Control Guidelines:</strong>
+                <ul class="mb-0 mt-2">
+                    <li>Ensure quantity accepted + quantity rejected = quantity inspected</li>
+                    <li>Document all non-conformities in the remarks section</li>
+                    <li>Set status to 'Passed' only if all items meet quality standards</li>
+                </ul>
+            </div>
+            
+            <div class="row">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Save Inspection
+                    </button>
+                    <a href="{{ url_for('main.inspections_list') }}" class="btn btn-secondary ms-2">
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Auto-calculate rejected quantity
+document.addEventListener('DOMContentLoaded', function() {
+    const qtyInspected = document.getElementById('qty_inspected');
+    const qtyAccepted = document.getElementById('qty_accepted');
+    const qtyRejected = document.getElementById('qty_rejected');
+    
+    function calculateRejected() {
+        const inspected = parseFloat(qtyInspected.value) || 0;
+        const accepted = parseFloat(qtyAccepted.value) || 0;
+        const rejected = Math.max(0, inspected - accepted);
+        qtyRejected.value = rejected.toFixed(3);
+    }
+    
+    qtyInspected.addEventListener('input', calculateRejected);
+    qtyAccepted.addEventListener('input', calculateRejected);
+});
+</script>
+{% endblock %}
