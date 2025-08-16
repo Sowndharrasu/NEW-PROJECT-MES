@@ -1,7 +1,9 @@
 from flask import Blueprint, redirect, render_template, request, jsonify, url_for
 from flask_login import login_required
-from forms import CustomerForm, WorkOrderForm
+from forms import CustomerForm, WorkOrderForm, EmployeeForm
 from models_mongo import EmployeeDoc, MachineDoc, WorkOrderDoc, InventoryItemDoc
+
+from utils import SimplePagination
 
 main_bp = Blueprint("main", __name__)
 
@@ -118,12 +120,42 @@ def dashboard():
 @main_bp.route('/employees_list')
 @login_required
 def employees_list():
-    return render_template('employees_list.html')
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+    all_employees = list(EmployeeDoc.objects().order_by('-created_at'))
+    employees = SimplePagination(all_employees, page, per_page)
+    return render_template('employees/list.html', employees=employees)
 
-@main_bp.route('/employees_new')
+@main_bp.route('/employees_new', methods=['GET', 'POST'])
 @login_required
 def employees_new():
-    return render_template('employees_new.html')
+
+    form = EmployeeForm()
+
+    if request.method == 'POST':
+        data = request.get_json(silent=True) or request.form
+        form = EmployeeForm(data=data)
+
+        if form.validate_on_submit():
+            # Create a new EmployeeDoc instance
+            employee = EmployeeDoc(
+                code=form.employee_code.data,
+                name=form.name.data,
+                phone=form.phone.data,
+                email=form.email.data,
+                join_date=form.hire_date.data,
+                department=form.department.data,
+                is_active=form.is_active.data,
+                role=form.designation.data
+            )
+            employee.save()
+            return redirect(url_for('main.employees_list'))
+        else:
+            # Optionally print or flash form.errors for debugging
+            print(form.errors)
+
+
+    return render_template('employees/form.html', form = form, title="New Employee")
 
 @main_bp.route('/grn_new')
 @login_required
@@ -164,7 +196,7 @@ def machines_new():
 @main_bp.route('/products_list')
 @login_required
 def products_list():
-    return render_template('products_list.html')
+    return render_template('products/list.html')
 
 @main_bp.route('/products_new')
 @login_required

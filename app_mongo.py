@@ -40,7 +40,7 @@ def load_user(user_id: str):
         return None
 
 # Blueprints import
-from routes_mongo import main_bp  # noqa: E402
+from routes_final import main_bp  # noqa: E402
 from auth_mongo import auth_bp    # noqa: E402
 
 app.register_blueprint(main_bp)

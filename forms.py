@@ -17,7 +17,7 @@ class LoginForm(FlaskForm):
 class EmployeeForm(FlaskForm):
     employee_code = StringField('Employee Code', validators=[DataRequired(), Length(max=20)])
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
-    department = StringField('Department', validators=[DataRequired(), Length(max=50)])
+    department = SelectField('Department', coerce=str, validators=[DataRequired()])
     designation = StringField('Designation', validators=[DataRequired(), Length(max=50)])
     phone = StringField('Phone', validators=[Optional(), Length(max=20)])
     email = StringField('Email', validators=[Optional(), Email(), Length(max=120)])
@@ -79,6 +79,12 @@ class VendorForm(FlaskForm):
     country = StringField('Country', validators=[Optional(), Length(max=50)])
     postal_code = StringField('Postal Code', validators=[Optional(), Length(max=10)])
     is_active = BooleanField('Active')
+
+
+# ------------------ DEPARTMENT ------------------ #
+class DepartmentForm(FlaskForm):
+    name = StringField('Department Name', validators=[DataRequired(), Length(max=100)])
+    is_active = BooleanField('Active', default=True)
 
 
 # ------------------ PRODUCT ------------------ #

@@ -1,13 +1,13 @@
-{% extends "base.html" %} {% block title %}Employees - Manufacturing ERP
+{% extends "base.html" %} {% block title %}Departments - Manufacturing ERP
 System{% endblock %} {% block content %}
 <div class="row mb-4">
     <div class="col-md-6">
-        <h1 class="h3 mb-3"><i class="fas fa-users me-2"></i>Employees</h1>
+        <h1 class="h3 mb-3"><i class="fas fa-building me-2"></i>Departments</h1>
     </div>
     <div class="col-md-6 text-end">
         {% if current_user.role in ['Admin', 'Manager'] %}
-        <a href="{{ url_for('main.employees_new') }}" class="btn btn-primary">
-            <i class="fas fa-plus me-2"></i>Add Employee
+        <a href="{{ url_for('main.departments_new') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Add Department
         </a>
         {% endif %}
     </div>
@@ -15,43 +15,32 @@ System{% endblock %} {% block content %}
 
 <div class="card">
     <div class="card-body">
-        {% if employees.items %}
+        {% if departments.items %}
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Employee Code</th>
-                        <th>Name</th>
-                        <th>Department</th>
-                        <th>Designation</th>
-                        <th>Phone</th>
+                        <th>Department Name</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for employee in employees.items %}
+                    {% for department in departments.items %}
                     <tr>
-                        <td><strong>{{ employee.code }}</strong></td>
-                        <td>{{ employee.name }}</td>
-                        <td>
-                            {{ employee.department.name if employee.department
-                            else '-' }}
-                        </td>
-                        <td>{{ employee.role }}</td>
-                        <td>{{ employee.phone or '-' }}</td>
+                        <td><strong>{{ department.name }}</strong></td>
                         <td>
                             <span
-                                class="badge {{ 'bg-success' if employee.is_active else 'bg-secondary' }}"
+                                class="badge {{ 'bg-success' if department.is_active else 'bg-secondary' }}"
                             >
-                                {{ 'Active' if employee.is_active else
+                                {{ 'Active' if department.is_active else
                                 'Inactive' }}
                             </span>
                         </td>
                         <td>
                             {% if current_user.role in ['Admin', 'Manager'] %}
                             <a
-                                href="{{ url_for('main.employees_edit', id=employee.id) }}"
+                                href="{{ url_for('main.departments_edit', id=department.id) }}"
                                 class="btn btn-sm btn-outline-primary"
                             >
                                 <i class="fas fa-edit"></i>
@@ -65,25 +54,26 @@ System{% endblock %} {% block content %}
         </div>
 
         <!-- Pagination -->
-        {% if employees.pages > 1 %}
-        <nav aria-label="Employee pagination">
+        {% if departments.pages > 1 %}
+        <nav aria-label="Department pagination">
             <ul class="pagination justify-content-center mt-4">
-                {% if employees.has_prev %}
+                {% if departments.has_prev %}
                 <li class="page-item">
                     <a
                         class="page-link"
-                        href="{{ url_for('main.employees_list', page=employees.prev_num) }}"
+                        href="{{ url_for('main.departments_list', page=departments.prev_num) }}"
                     >
                         Previous
                     </a>
                 </li>
-                {% endif %} {% for page_num in employees.iter_pages(left_edge=1,
-                right_edge=1, left_current=1, right_current=2) %} {% if page_num
-                %} {% if page_num != employees.page %}
+                {% endif %} {% for page_num in
+                departments.iter_pages(left_edge=1, right_edge=1,
+                left_current=1, right_current=2) %} {% if page_num %} {% if
+                page_num != departments.page %}
                 <li class="page-item">
                     <a
                         class="page-link"
-                        href="{{ url_for('main.employees_list', page=page_num) }}"
+                        href="{{ url_for('main.departments_list', page=page_num) }}"
                     >
                         {{ page_num }}
                     </a>
@@ -96,11 +86,11 @@ System{% endblock %} {% block content %}
                 <li class="page-item disabled">
                     <span class="page-link">...</span>
                 </li>
-                {% endif %} {% endfor %} {% if employees.has_next %}
+                {% endif %} {% endfor %} {% if departments.has_next %}
                 <li class="page-item">
                     <a
                         class="page-link"
-                        href="{{ url_for('main.employees_list', page=employees.next_num) }}"
+                        href="{{ url_for('main.departments_list', page=departments.next_num) }}"
                     >
                         Next
                     </a>
@@ -110,17 +100,17 @@ System{% endblock %} {% block content %}
         </nav>
         {% endif %} {% else %}
         <div class="text-center py-5">
-            <i class="fas fa-users fa-3x text-muted mb-3"></i>
-            <h5>No employees found</h5>
+            <i class="fas fa-building fa-3x text-muted mb-3"></i>
+            <h5>No departments found</h5>
             <p class="text-muted">
-                Start by adding your first employee to the system.
+                Start by adding your first department to the system.
             </p>
             {% if current_user.role in ['Admin', 'Manager'] %}
             <a
-                href="{{ url_for('main.employees_new') }}"
+                href="{{ url_for('main.departments_new') }}"
                 class="btn btn-primary"
             >
-                <i class="fas fa-plus me-2"></i>Add Employee
+                <i class="fas fa-plus me-2"></i>Add Department
             </a>
             {% endif %}
         </div>
